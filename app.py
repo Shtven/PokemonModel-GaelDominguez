@@ -21,14 +21,15 @@ app.add_middleware(
 # Cargar el modelo entrenado
 model = load(pathlib.Path("model/All_Pokemon-v1.joblib"))
 
-# Definición de los datos de entrada (todas las columnas numéricas del CSV)
+# Definición de los datos de entrada (las 38 columnas del dataset sin Legendary)
 class InputData(BaseModel):
+    Number: int
     HP: int
-    Attack: int
-    Defense: int
-    Sp_Atk: int
-    Sp_Def: int
-    Speed: int
+    Att: int
+    Def: int
+    Spa: int
+    Spd: int
+    Spe: int
     BST: int
     Mean: float
     Standard_Deviation: float
@@ -69,14 +70,15 @@ class OutputData(BaseModel):
 def score(data: InputData):
     input_dict = data.dict()
 
-    # Mantener el mismo orden de columnas que en entrenamiento
+    # Mantener el mismo orden que en el entrenamiento
     ordered_values = [
+        input_dict["Number"],
         input_dict["HP"],
-        input_dict["Attack"],
-        input_dict["Defense"],
-        input_dict["Sp_Atk"],
-        input_dict["Sp_Def"],
-        input_dict["Speed"],
+        input_dict["Att"],
+        input_dict["Def"],
+        input_dict["Spa"],
+        input_dict["Spd"],
+        input_dict["Spe"],
         input_dict["BST"],
         input_dict["Mean"],
         input_dict["Standard_Deviation"],
@@ -111,8 +113,11 @@ def score(data: InputData):
     ]
 
     model_input = np.array(ordered_values).reshape(1, -1)
-
-    # Predecir probabilidad de ser legendario
     result = model.predict_proba(model_input)[:, -1][0]
 
     return {"score": float(result)}
+
+# Para confirmar al iniciar
+@app.on_event("startup")
+def check_features():
+    print(f"Número de features que espera el modelo: {model.n_features_in_}")

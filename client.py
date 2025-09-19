@@ -1,58 +1,50 @@
 import requests
 
 body = {
-    "HP": 106,
-    "Attack": 110,
-    "Defense": 90,
-    "Sp_Atk": 154,
-    "Sp_Def": 90,
-    "Speed": 130,
-    "BST": 680,
-    "Mean": 113.3,
-    "Standard_Deviation": 25.4,
+    "Number": 19,
+    "HP": 30,
+    "Att": 56,
+    "Def": 35,
+    "Spa": 25,
+    "Spd": 35,
+    "Spe": 72,
+    "BST": 253,
+    "Mean": 42.2,
+    "Standard_Deviation": 15.3,
     "Generation": 1,
-    "Experience_to_level_100": 1250000,
-    "Final_Evolution": 1,
-    "Catch_Rate": 3,
+    "Experience_to_level_100": 1000000,
+    "Final_Evolution": 0,
+    "Catch_Rate": 255,
     "Mega_Evolution": 0,
-    "Alolan_Form": 0,
+    "Alolan_Form": 1,
     "Galarian_Form": 0,
-    "Against_Normal": 1,
-    "Against_Fire": 1,
-    "Against_Water": 1,
-    "Against_Electric": 1,
-    "Against_Grass": 1,
-    "Against_Ice": 1,
-    "Against_Fighting": 2,
-    "Against_Poison": 1,
-    "Against_Ground": 1,
-    "Against_Flying": 1,
-    "Against_Psychic": 1,
-    "Against_Bug": 1,
-    "Against_Rock": 1,
-    "Against_Ghost": 1,
-    "Against_Dragon": 2,
-    "Against_Dark": 2,
-    "Against_Steel": 1,
-    "Against_Fairy": 1,
-    "Height": 2.0,
-    "Weight": 122,
-    "BMI": 30.5
+    "Against_Normal": 1.0,
+    "Against_Fire": 1.0,
+    "Against_Water": 1.0,
+    "Against_Electric": 1.0,
+    "Against_Grass": 1.0,
+    "Against_Ice": 1.0,
+    "Against_Fighting": 2.0,
+    "Against_Poison": 1.0,
+    "Against_Ground": 1.0,
+    "Against_Flying": 1.0,
+    "Against_Psychic": 1.0,
+    "Against_Bug": 1.0,
+    "Against_Rock": 1.0,
+    "Against_Ghost": 0.0,
+    "Against_Dragon": 1.0,
+    "Against_Dark": 1.0,
+    "Against_Steel": 1.0,
+    "Against_Fairy": 1.0,
+    "Height": 0.3,
+    "Weight": 3.5,
+    "BMI": 38.9
 }
 
-url = "http://127.0.0.1:8000/score"
+response = requests.post("http://127.0.0.1:8000/score", json=body)
 
+print("Status code:", response.status_code)
 try:
-    response = requests.post(url, json=body)
-
-    print("Status code:", response.status_code)
-
-    # Intentar parsear JSON
-    try:
-        print("JSON response:", response.json())
-    except Exception:
-        print("Raw response (not JSON):")
-        print(response.text)
-
-except requests.exceptions.RequestException as e:
-    print("Request failed:", e)
+    print("Response:", response.json())
+except Exception:
+    print("Raw response:", response.text)
